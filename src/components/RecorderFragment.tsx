@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type PresetKey = 'research' | 'triage' | 'expense';
 
@@ -49,7 +49,7 @@ export function RecorderFragment() {
   const [narrate, setNarrate] = useState(true);
   const [terminal, setTerminal] = useState(true);
   const [preset, setPreset] = useState<PresetKey>('research');
-  const stopped = useRef(false);
+  const [hasStopped, setHasStopped] = useState(false);
 
   useEffect(() => {
     if (!recording) return;
@@ -60,9 +60,9 @@ export function RecorderFragment() {
   const toggle = () => {
     if (recording) {
       setRecording(false);
-      stopped.current = true;
+      setHasStopped(true);
     } else {
-      stopped.current = false;
+      setHasStopped(false);
       setSeconds(0);
       setRecording(true);
     }
@@ -70,19 +70,23 @@ export function RecorderFragment() {
 
   const mm = String(Math.floor(seconds / 60)).padStart(2, '0');
   const ss = String(seconds % 60).padStart(2, '0');
-  const state = recording ? '录制中 · 本地' : stopped.current ? '已捕获 · 待分析' : '就绪';
+  const state = recording ? '录制中 · 本地' : hasStopped ? '已捕获 · 待分析' : '就绪';
   const hint = recording
     ? `正在本地捕获「${PRESETS[preset].label}」· 0 字节上传`
-    : stopped.current
+    : hasStopped
       ? `已捕获 ${ Math.max(seconds, 1) } 秒本地会话 · 点击 Analyze 才会上传`
       : '点击红键试录一次，观察本地捕获流如何工作';
 
-  const currentEvents = PRESETS[preset].events;
+  const currentEvents = PRESETS[preset].events.filter((event) => {
+    if (event.channel === '旁白') return narrate;
+    if (event.channel === '终端') return terminal;
+    return true;
+  });
   const visibleCount = recording
     ? Math.min(currentEvents.length, Math.floor(seconds / 2) + 1)
-    : stopped.current
+    : hasStopped
       ? currentEvents.length
-      : 2;
+      : Math.min(currentEvents.length, 2);
 
   return (
     <div className="rec" data-ui data-recording={recording}>
@@ -106,9 +110,11 @@ export function RecorderFragment() {
               type="button"
               className="rec-preset-btn"
               aria-pressed={preset === key}
+              disabled={recording}
               onClick={() => {
                 setPreset(key);
-                if (!recording) stopped.current = false;
+                setHasStopped(false);
+                setSeconds(0);
               }}
             >
               {PRESETS[key].label}
@@ -140,7 +146,7 @@ export function RecorderFragment() {
             <i aria-hidden="true" />
           </button>
           <span className="rec-btn-caption">
-            {recording ? '点击停止录制' : stopped.current ? '重新录制' : '点击开始录制'}
+            {recording ? '点击停止录制' : hasStopped ? '重新录制' : '点击开始录制'}
           </span>
         </div>
       </div>
@@ -198,7 +204,7 @@ export function RecorderFragment() {
         <div className="rec-feed-head">
           <span>本地事件时间线（预览）</span>
           <span className="tabular-nums">
-            {recording ? `实时写入中 · ${visibleCount} 条` : stopped.current ? `共 ${visibleCount} 条事件` : '待命示例'}
+            {recording ? `实时写入中 · ${visibleCount} 条` : hasStopped ? `共 ${visibleCount} 条事件` : '待命示例'}
           </span>
         </div>
         <ul className="rec-feed-list" aria-label="捕获事件预览">
@@ -219,7 +225,7 @@ export function RecorderFragment() {
           <li>PII / 机密脱敏扫描已启用</li>
         </ul>
         <div className="rec-foot-right">
-          {stopped.current ? (
+          {hasStopped ? (
             <a href="#how" className="rec-analyze-link">
               Analyze 还原步骤 →
             </a>

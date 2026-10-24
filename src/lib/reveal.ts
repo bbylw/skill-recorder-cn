@@ -27,7 +27,7 @@ export function useReveal() {
           io.unobserve(entry.target);
         }
       },
-      { rootMargin: '0px 0px -12% 0px', threshold: 0.06 },
+      { rootMargin: '0px 0px -4% 0px', threshold: 0.02 },
     );
 
     nodes.forEach((n) => io.observe(n));

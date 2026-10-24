@@ -16,7 +16,7 @@ function Panel({ kind }: { kind: Feature['panel'] }) {
           <span className="k">description:</span> 按 tracker 逐个研究客户并汇总到 Teams{'\n'}
           <span className="c">---</span>
           {'\n'}
-          <span className="c"># Steps (1–4) · 安装或导出前可完整审阅</span>
+          <span className="c"># Steps (1-4) · 安装或导出前可完整审阅</span>
         </pre>
       </div>
     );
@@ -103,7 +103,7 @@ function Panel({ kind }: { kind: Feature['panel'] }) {
               <span>한국어</span>
               <span>+92</span>
             </div>
-            <p className="figure-quote">“先查融资和产品动作，再写回 notes 列…” → 自动对齐到第 2–3 步</p>
+            <p className="figure-quote">“先查融资和产品动作，再写回 notes 列…” → 自动对齐到第 2-3 步</p>
           </div>
         </div>
       </div>
@@ -161,35 +161,24 @@ function Panel({ kind }: { kind: Feature['panel'] }) {
 
 export function Features() {
   return (
-    <section id="features" className="page-m scroll-mt-6 border-b border-hairline py-[64px] mob:py-[96px]" aria-labelledby="feat-title">
-      <div className="section-head flex flex-wrap items-end justify-between gap-4 border-b border-hairline pb-7">
-        <div>
-          <h2 id="feat-title" className="text-h2 max-mob:text-[26px]" data-reveal>
-            两个产物，同一条流程。
-          </h2>
-          <p className="mt-2 max-w-[56ch] text-small text-muted" data-reveal style={d(60)}>
-            无论生成按需调用的 <code className="inline-code">SKILL.md</code> 还是按计划触发的 Automation，底层都优先调用原生工具并从单次演示中泛化。
-          </p>
-        </div>
-        <span className="text-micro text-muted tabular-nums" data-reveal style={d(90)}>
-          CAPABILITIES · 01 — 06
-        </span>
+    <section id="features" className="page-m section-block scroll-mt-24" aria-labelledby="feat-title">
+      <div className="section-head">
+        <h2 id="feat-title" data-reveal>两个产物，同一条流程。</h2>
+        <p data-reveal style={d(60)}>
+          按需调用的 <code className="inline-code">SKILL.md</code> 与按计划触发的 Automation，都建立在原生工具和示例归纳之上。
+        </p>
       </div>
 
-      <div className="mt-10 grid gap-x-10 gap-y-10 mob:mt-12 mob:grid-cols-2">
-        {FEATURES.map((f, i) => (
-          <article key={f.id} className="feat-card" data-reveal style={d((i % 2) * 70)}>
-            <Panel kind={f.panel} />
-            <div className="mt-4 flex items-center gap-2">
-              <span className="feat-tag">{f.tag}</span>
-            </div>
-            <h3 className="mt-2 text-[19px] text-ink">{f.title}</h3>
-            <div className="mt-2.5 space-y-1.5">
-              {f.lines.map((line) => (
-                <p key={line} className="max-w-[54ch] text-small leading-[1.6] text-soft">
-                  {line}
-                </p>
-              ))}
+      <div className="features-grid">
+        {FEATURES.map((feature, index) => (
+          <article key={feature.id} className={`feat-card feat-card-${index + 1}`} data-reveal style={d((index % 2) * 70)}>
+            <Panel kind={feature.panel} />
+            <div className="feat-copy">
+              <span className="feat-tag">{feature.tag}</span>
+              <h3>{feature.title}</h3>
+              <div className="feat-description">
+                {feature.lines.map((line) => <p key={line}>{line}</p>)}
+              </div>
             </div>
           </article>
         ))}

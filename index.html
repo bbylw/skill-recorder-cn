@@ -8,7 +8,7 @@
       name="description"
       content="Skill Recorder 中文站：把你在电脑上做过一次的操作录下来，GitHub Copilot 还原出意图与有序步骤，一步生成可复用的 Skill 或按计划跑的自动化。录制、抽帧、转写都在本地完成。"
     />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="theme-color" content="#0b0c0e" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="zh_CN" />
@@ -23,6 +23,17 @@
     <link rel="preload" href="/fonts/switzer-500.woff2" as="font" type="font/woff2" crossorigin />
     <script>
       document.documentElement.classList.add('js');
+      try {
+        const saved = localStorage.getItem('skill-recorder-theme');
+        const theme = saved === 'light' || saved === 'dark'
+          ? saved
+          : (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#0b0c0e' : '#f4f5f6';
+      } catch {
+        document.documentElement.dataset.theme = 'dark';
+      }
     </script>
   </head>
   <body>

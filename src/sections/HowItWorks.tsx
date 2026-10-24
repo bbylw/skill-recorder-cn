@@ -1,6 +1,17 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import type { KeyboardEvent as ReactKeyboardEvent } from 'react';
+import { ArrowRightIcon } from '@phosphor-icons/react';
 import { AUTOMATION_MD, OTHER_SESSIONS, SESSION, SKILL_MD, STAGES, type Stage } from '../data/content';
 import { d } from '../lib/reveal';
+import { CopyButton } from '../components/CopyButton';
+
+function getNextTab(event: ReactKeyboardEvent, current: number, count: number) {
+  if (event.key === 'ArrowRight' || event.key === 'ArrowDown') return (current + 1) % count;
+  if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') return (current - 1 + count) % count;
+  if (event.key === 'Home') return 0;
+  if (event.key === 'End') return count - 1;
+  return null;
+}
 
 function ToolbarSpecimen() {
   const [micOn, setMicOn] = useState(true);
@@ -40,7 +51,7 @@ function ToolbarSpecimen() {
         <div className="hiw-subrow">
           <span className="hiw-tag">窗口焦点</span>
           <span className="hiw-val">Excel → Edge (Contoso News) → Teams</span>
-          <span className="hiw-time">00:04 – 00:31</span>
+          <span className="hiw-time">00:04 至 00:31</span>
         </div>
         <div className="hiw-subrow">
           <span className="hiw-tag">屏幕视频</span>
@@ -163,52 +174,56 @@ function StepsSpecimen() {
 
 function FileSpecimen() {
   const [mode, setMode] = useState<'skill' | 'automation'>('skill');
-  const [copied, setCopied] = useState(false);
+  const tabs = useRef<Array<HTMLButtonElement | null>>([]);
   const content = mode === 'skill' ? SKILL_MD : AUTOMATION_MD;
+  const modes = ['skill', 'automation'] as const;
 
-  const copyFile = async () => {
-    try {
-      await navigator.clipboard.writeText(content);
-      setCopied(true);
-      window.setTimeout(() => setCopied(false), 2000);
-    } catch {
-      setCopied(false);
-    }
+  const selectMode = (index: number, focus = false) => {
+    setMode(modes[index]);
+    if (focus) tabs.current[index]?.focus();
   };
 
   return (
     <div className="hiw-card" data-ui>
       <div className="file-bar">
         <div className="file-tabs" role="tablist" aria-label="产物预览切换">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === 'skill'}
-            className="file-tab"
-            onClick={() => setMode('skill')}
-          >
-            Review SKILL.md（按需技能）
-          </button>
-          <button
-            type="button"
-            role="tab"
-            aria-selected={mode === 'automation'}
-            className="file-tab"
-            onClick={() => setMode('automation')}
-          >
-            Automation（定时运行）
-          </button>
+          {modes.map((item, index) => (
+            <button
+              key={item}
+              ref={(node) => { tabs.current[index] = node; }}
+              type="button"
+              role="tab"
+              id={`file-tab-${item}`}
+              aria-selected={mode === item}
+              aria-controls="generated-file-content"
+              tabIndex={mode === item ? 0 : -1}
+              className="file-tab"
+              onClick={() => selectMode(index)}
+              onKeyDown={(event) => {
+                const next = getNextTab(event, index, modes.length);
+                if (next === null) return;
+                event.preventDefault();
+                selectMode(next, true);
+              }}
+            >
+              {item === 'skill' ? 'SKILL.md' : 'Automation'}
+            </button>
+          ))}
         </div>
 
-        <div className="flex items-center gap-2">
-          <span className="readonly-pill">只读预览 · 不写盘</span>
-          <button type="button" className="copy" onClick={copyFile}>
-            {copied ? '已复制' : '复制内容'}
-          </button>
+        <div className="file-actions">
+          <span className="readonly-pill">只读预览，不写盘</span>
+          <CopyButton text={content} label="复制内容" target="generated-file-content" />
         </div>
       </div>
 
-      <pre className="file">{content}</pre>
+      <pre
+        className="file"
+        id="generated-file-content"
+        role="tabpanel"
+        aria-labelledby={`file-tab-${mode}`}
+        tabIndex={0}
+      >{content}</pre>
     </div>
   );
 }
@@ -221,47 +236,72 @@ function Evidence({ kind }: { kind: Stage['fragment'] }) {
 }
 
 export function HowItWorks() {
+  const [active, setActive] = useState(0);
+  const tabs = useRef<Array<HTMLButtonElement | null>>([]);
+  const stage = STAGES[active];
+
+  const selectStage = (index: number, focus = false) => {
+    setActive(index);
+    if (focus) tabs.current[index]?.focus();
+  };
+
   return (
-    <section id="how" className="page-m scroll-mt-6 border-b border-hairline py-[64px] mob:py-[96px]" aria-labelledby="how-title">
-      <div className="section-head flex flex-wrap items-end justify-between gap-4 border-b border-hairline pb-7">
-        <div>
-          <h2 id="how-title" className="text-h2 max-mob:text-[26px]" data-reveal>
-            一次录制，四个动作。
-          </h2>
-          <p className="mt-2 max-w-[54ch] text-small text-muted" data-reveal style={d(60)}>
-            从按下录制到产出可执行的 <code className="inline-code">SKILL.md</code>，同一张会话卡沿着「录 → 控 → 析 → 成」走完闭环。
-          </p>
-        </div>
-        <span className="text-micro text-muted tabular-nums" data-reveal style={d(90)}>
-          WORKFLOW · 01 — 04
-        </span>
+    <section id="how" className="page-m section-block scroll-mt-24" aria-labelledby="how-title">
+      <div className="section-head">
+        <h2 id="how-title" data-reveal>一次录制，四个动作。</h2>
+        <p data-reveal style={d(60)}>
+          从本地捕获到生成 <code className="inline-code">SKILL.md</code>，在同一张会话卡里完成整个流程。
+        </p>
       </div>
 
-      <ol className="mt-10 grid list-none gap-10 mob:mt-12 mob:gap-10">
-        {STAGES.map((stage, i) => (
-          <li
-            key={stage.id}
-            className="hiw-row grid items-start gap-6 border-b border-hairline pb-10 last:border-b-0 last:pb-0 mob:grid-cols-[minmax(320px,420px)_minmax(0,1fr)] mob:gap-14"
-          >
-            <div className="hiw-copy" data-reveal style={d(60)}>
-              <div className="mb-3 flex items-center gap-2.5">
-                <span className="stage-num">{stage.stepNo}</span>
-                <span className="stage-badge">{stage.badge}</span>
-              </div>
-              <p className="max-w-[44ch] text-[17px] leading-[1.6] text-soft">
-                <strong className="font-medium text-ink">{stage.runIn}</strong>
-                {stage.body}
-              </p>
-              <p className="mt-3 text-micro text-muted">{stage.meta}</p>
-            </div>
+      <div className="workflow-layout" data-reveal style={d(100)}>
+        <div className="workflow-tabs" role="tablist" aria-label="录制工作流程">
+          {STAGES.map((item, index) => (
+            <button
+              key={item.id}
+              ref={(node) => { tabs.current[index] = node; }}
+              type="button"
+              role="tab"
+              id={`stage-tab-${item.id}`}
+              aria-selected={active === index}
+              aria-controls="stage-panel"
+              tabIndex={active === index ? 0 : -1}
+              className="workflow-tab"
+              onClick={() => selectStage(index)}
+              onKeyDown={(event) => {
+                const next = getNextTab(event, index, STAGES.length);
+                if (next === null) return;
+                event.preventDefault();
+                selectStage(next, true);
+              }}
+            >
+              <span className="stage-num">{item.stepNo}</span>
+              <span className="workflow-tab-copy">
+                <strong>{item.runIn}</strong>
+                <span>{item.badge.split(' · ')[0]}</span>
+              </span>
+              <ArrowRightIcon className="workflow-arrow" size={18} aria-hidden="true" />
+            </button>
+          ))}
+        </div>
 
-            <div data-reveal style={d(130)} className="min-w-0">
-              <Evidence kind={stage.fragment} />
-            </div>
-            <span className="sr-only">{`第 ${i + 1} 步，共 ${STAGES.length} 步`}</span>
-          </li>
-        ))}
-      </ol>
+        <article
+          key={stage.id}
+          id="stage-panel"
+          className="workflow-panel answer-swap"
+          role="tabpanel"
+          aria-labelledby={`stage-tab-${stage.id}`}
+          tabIndex={0}
+        >
+          <div className="workflow-panel-head">
+            <span className="stage-badge">{stage.badge}</span>
+            <h3>{stage.runIn}</h3>
+            <p>{stage.body}</p>
+            <p className="workflow-meta">{stage.meta}</p>
+          </div>
+          <Evidence kind={stage.fragment} />
+        </article>
+      </div>
     </section>
   );
 }

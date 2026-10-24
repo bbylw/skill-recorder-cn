@@ -108,7 +108,7 @@ description: 按 tracker 逐个研究客户，写回表格并汇总到 Teams
 1. 打开 research-tracker.xlsx，定位到第一个客户所在行。
 2. 用 web_fetch 搜索该客户的近期新闻，记录融资、产品与市场动作。
 3. 把结论写回该客户的 notes 列，保留来源链接。
-4. 重复第 2–3 步，处理其余客户行。`;
+4. 重复第 2-3 步，处理其余客户行。`;
 
 export const AUTOMATION_MD = `---
 name: weekly-account-research
