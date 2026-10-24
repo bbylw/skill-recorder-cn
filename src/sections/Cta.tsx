@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import type { FormEvent } from 'react';
-import { ArrowUpRightIcon, CopySimpleIcon, DownloadSimpleIcon } from '@phosphor-icons/react';
+import { CopySimpleIcon, DownloadSimpleIcon } from '@phosphor-icons/react';
 import { RELEASE, SESSION } from '../data/content';
 import { d } from '../lib/reveal';
 
@@ -140,7 +140,7 @@ export function Cta() {
 
             <div className="dlg-foot">
               <span>准备录制真实任务？</span>
-              <a href={RELEASE} target="_blank" rel="noreferrer">安装 Skill Recorder<ArrowUpRightIcon size={15} aria-hidden="true" /></a>
+              <a href={RELEASE} target="_blank" rel="noreferrer">安装 Skill Recorder</a>
             </div>
           </form>
         </div>

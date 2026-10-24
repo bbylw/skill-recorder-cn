@@ -1,4 +1,3 @@
-import { ArrowUpRightIcon } from '@phosphor-icons/react';
 import { FOOTER_FINE, FOOTER_LINKS } from '../data/content';
 
 export function Foot() {
@@ -13,7 +12,7 @@ export function Foot() {
           <nav aria-label="页脚导航">
             <ul className="footer-links">
               {FOOTER_LINKS.map((link) => (
-                <li key={link.label}><a href={link.href} rel="noreferrer" target="_blank">{link.label}<ArrowUpRightIcon size={13} aria-hidden="true" /></a></li>
+                <li key={link.label}><a href={link.href} rel="noreferrer" target="_blank">{link.label}</a></li>
               ))}
             </ul>
           </nav>

@@ -1,8 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
 import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ArrowUpRightIcon,
   GithubLogoIcon,
   ListIcon,
   MicrophoneIcon,
@@ -131,7 +128,6 @@ export function SiteNav() {
                 onClick={() => setOpen(false)}
               >
                 <span>{item.label}</span>
-                <ArrowRightIcon size={17} aria-hidden="true" />
               </a>
             </li>
           ))}
@@ -159,11 +155,9 @@ export function Hero() {
             <div className="hero-actions" data-reveal style={d(260)}>
               <a className="btn-primary" href="#install">
                 <span>安装 Skill Recorder</span>
-                <ArrowDownIcon size={17} weight="bold" aria-hidden="true" />
               </a>
               <a className="btn-secondary" href="#how">
                 <span>查看工作流</span>
-                <ArrowRightIcon size={17} aria-hidden="true" />
               </a>
             </div>
           </div>
@@ -175,7 +169,6 @@ export function Hero() {
           </div>
           <a className="release-link" href={RELEASE} target="_blank" rel="noreferrer">
             <span>源码发布版，支持 macOS、Windows 11 与 Ubuntu</span>
-            <ArrowUpRightIcon size={15} aria-hidden="true" />
           </a>
         </div>
       </div>

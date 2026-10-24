@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { ArrowUpRightIcon } from '@phosphor-icons/react';
 import { COMMIT, DOCS, INSTALL, RELEASE, RELEASED, VERSION } from '../data/content';
 import { d } from '../lib/reveal';
 import { CopyButton } from '../components/CopyButton';
@@ -15,7 +14,7 @@ export function Install() {
           <p data-reveal style={d(60)}>一行命令下载独立 Node 运行时，在本机构建固定提交，不污染全局环境。</p>
         </div>
         <a href={RELEASE} target="_blank" rel="noreferrer" className="section-action" data-reveal style={d(90)}>
-          <span>最新发布 {VERSION}</span><ArrowUpRightIcon size={17} aria-hidden="true" />
+          <span>最新发布 {VERSION}</span>
         </a>
       </div>
 
@@ -61,7 +60,6 @@ export function Install() {
                 <a key={doc.label} className="doc-link-item" href={doc.href} rel="noreferrer" target="_blank">
                   <div>
                     <span>{doc.label}</span>
-                    <ArrowUpRightIcon size={16} aria-hidden="true" />
                   </div>
                   <code>{doc.value}</code>
                 </a>

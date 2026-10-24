@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { ArrowLeftIcon, ArrowRightIcon, ArrowUpRightIcon, CaretDownIcon, CaretRightIcon } from '@phosphor-icons/react';
+import { ArrowLeftIcon, ArrowRightIcon, CaretDownIcon, CaretRightIcon } from '@phosphor-icons/react';
 import { FAQ, REPO } from '../data/content';
 import { d } from '../lib/reveal';
 
@@ -65,7 +65,7 @@ export function Faq() {
           <p key={`answer-${active}`} className="answer-swap faq-full">{FAQ[active].a}</p>
           <div className="faq-pane-foot">
             <a href={`${REPO}/issues`} rel="noreferrer" target="_blank" className="faq-issue-link">
-              <span>在 GitHub Issues 提问</span><ArrowUpRightIcon size={16} aria-hidden="true" />
+              <span>在 GitHub Issues 提问</span>
             </a>
             <div className="faq-nav">
               <button type="button" className="icon-btn" onClick={() => move(active - 1)} aria-label="上一条问题"><ArrowLeftIcon size={17} aria-hidden="true" /></button>
@@ -103,7 +103,7 @@ export function Faq() {
           );
         })}
         <a href={`${REPO}/issues`} rel="noreferrer" target="_blank" className="faq-issue-link">
-          <span>在 GitHub Issues 提问</span><ArrowUpRightIcon size={16} aria-hidden="true" />
+          <span>在 GitHub Issues 提问</span>
         </a>
       </div>
     </section>

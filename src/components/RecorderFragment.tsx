@@ -227,7 +227,7 @@ export function RecorderFragment() {
         <div className="rec-foot-right">
           {hasStopped ? (
             <a href="#how" className="rec-analyze-link">
-              Analyze 还原步骤 →
+              Analyze 还原步骤
             </a>
           ) : (
             <span className="rec-keys">⌘⇧R / Ctrl+Shift+R</span>
