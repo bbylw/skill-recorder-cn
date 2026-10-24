@@ -5,21 +5,45 @@ function Panel({ kind }: { kind: Feature['panel'] }) {
   if (kind === 'file')
     return (
       <div className="panel" data-ui>
-        <span className="lab">SKILL.md</span>
-        <pre className="file-in"><span className="c">---</span>{'\n'}name: weekly-account-research{'\n'}description: 按 tracker 逐个研究客户{'\n'}<span className="c">---</span></pre>
+        <div className="panel-top">
+          <span className="lab">~/.copilot/skills/weekly-account-research/SKILL.md</span>
+          <span className="panel-pill">只读预览</span>
+        </div>
+        <pre className="file-in">
+          <span className="c">---</span>
+          {'\n'}
+          <span className="k">name:</span> weekly-account-research{'\n'}
+          <span className="k">description:</span> 按 tracker 逐个研究客户并汇总到 Teams{'\n'}
+          <span className="c">---</span>
+          {'\n'}
+          <span className="c"># Steps (1–4) · 安装或导出前可完整审阅</span>
+        </pre>
       </div>
     );
 
   if (kind === 'schedule')
     return (
       <div className="panel" data-ui>
-        <div className="sched">
-          <b>每周一 09:00</b>
-          <span>启用</span>
+        <div className="panel-top">
+          <span className="lab">AUTOMATION SCHEDULE · 触发器配置</span>
+          <span className="panel-pill-active">
+            <i aria-hidden="true" />
+            已启用
+          </span>
         </div>
-        <div className="sched">
-          <span>同一份流程</span>
-          <span>Research 频道</span>
+        <div className="sched-grid">
+          <div className="sched-item">
+            <span className="sched-k">执行周期</span>
+            <b className="sched-v">每周一 09:00 (0 9 * * 1)</b>
+          </div>
+          <div className="sched-item">
+            <span className="sched-k">输出投递</span>
+            <b className="sched-v">Teams · #Research 频道</b>
+          </div>
+          <div className="sched-item">
+            <span className="sched-k">权限策略</span>
+            <span className="sched-sub">复用已验证的原生工具权限与安装流程</span>
+          </div>
         </div>
       </div>
     );
@@ -27,22 +51,30 @@ function Panel({ kind }: { kind: Feature['panel'] }) {
   if (kind === 'tools')
     return (
       <div className="panel" data-ui>
+        <div className="panel-top">
+          <span className="lab">NATIVE TOOL DISPATCH · 工具调用栈</span>
+          <span className="panel-pill">无坐标依赖</span>
+        </div>
         <div className="rows">
           <div>
-            <span>gh CLI</span>
-            <span>原生</span>
+            <span className="font-mono text-[12.5px] text-ink">gh CLI</span>
+            <span className="row-desc">PR / Issue / Release 读写</span>
+            <span className="row-badge">原生调用</span>
           </div>
           <div>
-            <span>web_fetch</span>
-            <span>原生</span>
+            <span className="font-mono text-[12.5px] text-ink">web_fetch</span>
+            <span className="row-desc">网页检索与正文抓取</span>
+            <span className="row-badge">原生调用</span>
           </div>
           <div>
-            <span>文件读写</span>
-            <span>原生</span>
+            <span className="font-mono text-[12.5px] text-ink">fs / xlsx</span>
+            <span className="row-desc">本地文件与表格结构化读写</span>
+            <span className="row-badge">原生调用</span>
           </div>
           <div>
-            <span>任意 MCP 工具</span>
-            <span>原生</span>
+            <span className="font-mono text-[12.5px] text-ink">MCP Server</span>
+            <span className="row-desc">Teams / Slack / 内部系统</span>
+            <span className="row-badge">原生调用</span>
           </div>
         </div>
       </div>
@@ -51,52 +83,114 @@ function Panel({ kind }: { kind: Feature['panel'] }) {
   if (kind === 'figure')
     return (
       <div className="panel" data-ui>
-        <div className="big">99</div>
-        <span className="lab">种旁白语言 · 设备端 Whisper · 首次下载约 252 MB</span>
+        <div className="panel-top">
+          <span className="lab">ON-DEVICE WHISPER · 设备端语音模型</span>
+          <span className="panel-pill">首次约 252 MB</span>
+        </div>
+        <div className="figure-body">
+          <div className="figure-num-wrap">
+            <div className="big">99</div>
+            <span className="figure-unit">种旁白语言</span>
+          </div>
+          <div className="figure-langs">
+            <div className="lang-chips">
+              <span>中文</span>
+              <span>English</span>
+              <span>日本語</span>
+              <span>Deutsch</span>
+              <span>Español</span>
+              <span>Français</span>
+              <span>한국어</span>
+              <span>+92</span>
+            </div>
+            <p className="figure-quote">“先查融资和产品动作，再写回 notes 列…” → 自动对齐到第 2–3 步</p>
+          </div>
+        </div>
       </div>
     );
 
   if (kind === 'trace')
     return (
       <div className="panel" data-ui>
-        <div className="trace">
-          <span>一份表单</span>
-          <span className="arrow" aria-hidden="true">
+        <div className="panel-top">
+          <span className="lab">PARAMETER INDUCTION · 从单次样本归纳变量</span>
+          <span className="panel-pill">泛化执行</span>
+        </div>
+        <div className="trace-box">
+          <div className="trace-col">
+            <span className="trace-head">录制 1 次示例</span>
+            <code className="trace-code">Contoso 客户行</code>
+          </div>
+          <span className="trace-arrow" aria-hidden="true">
             →
           </span>
-          <span>所有同类表单</span>
+          <div className="trace-col">
+            <span className="trace-head">提取可复用参数</span>
+            <code className="trace-code accent">{'{customer_row}'}</code>
+          </div>
+          <span className="trace-arrow" aria-hidden="true">
+            →
+          </span>
+          <div className="trace-col">
+            <span className="trace-head">自动批处理全部同类</span>
+            <code className="trace-code">Fabrikam · Northwind · *</code>
+          </div>
         </div>
-        <span className="lab">从这一个示例里归纳，而不是记住坐标</span>
       </div>
     );
 
   return (
     <div className="panel" data-ui>
-      <div className="sched">
-        <b>Copilot CLI 1.0.78</b>
+      <div className="panel-top">
+        <span className="lab">PINNED RUNTIME · 独立内置 CLI</span>
+        <span className="panel-pill">v1.0.78</span>
       </div>
-      <span className="lab">浏览器 Web OAuth · 不需要设备码 · 五分钟后超时</span>
+      <div className="cli-box">
+        <code className="cli-cmd">copilot --no-auto-update login --web-flow</code>
+        <div className="cli-steps">
+          <span>1. 浏览器 SSO 会话复用</span>
+          <span>→</span>
+          <span>2. Authorize Copilot（免设备码）</span>
+          <span>→</span>
+          <span>5 分钟超时可取消</span>
+        </div>
+      </div>
     </div>
   );
 }
 
 export function Features() {
   return (
-    <section className="page-m py-[52px] mob:py-[80px]" aria-labelledby="feat-title">
-      <h2 id="feat-title" className="text-h2 max-mob:text-[24px]" data-reveal>
-        两个产物，同一条流程。
-      </h2>
+    <section id="features" className="page-m scroll-mt-6 border-b border-hairline py-[64px] mob:py-[96px]" aria-labelledby="feat-title">
+      <div className="section-head flex flex-wrap items-end justify-between gap-4 border-b border-hairline pb-7">
+        <div>
+          <h2 id="feat-title" className="text-h2 max-mob:text-[26px]" data-reveal>
+            两个产物，同一条流程。
+          </h2>
+          <p className="mt-2 max-w-[56ch] text-small text-muted" data-reveal style={d(60)}>
+            无论生成按需调用的 <code className="inline-code">SKILL.md</code> 还是按计划触发的 Automation，底层都优先调用原生工具并从单次演示中泛化。
+          </p>
+        </div>
+        <span className="text-micro text-muted tabular-nums" data-reveal style={d(90)}>
+          CAPABILITIES · 01 — 06
+        </span>
+      </div>
 
-      <div className="mt-9 grid gap-x-12 gap-y-11 mob:mt-11 mob:grid-cols-2">
+      <div className="mt-10 grid gap-x-10 gap-y-10 mob:mt-12 mob:grid-cols-2">
         {FEATURES.map((f, i) => (
-          <article key={f.id} data-reveal style={d((i % 2) * 70)}>
+          <article key={f.id} className="feat-card" data-reveal style={d((i % 2) * 70)}>
             <Panel kind={f.panel} />
-            <h3 className="mt-5 text-[18px]">{f.title}</h3>
-            {f.lines.map((line) => (
-              <p key={line} className="mt-2 max-w-[52ch] text-small text-soft">
-                {line}
-              </p>
-            ))}
+            <div className="mt-4 flex items-center gap-2">
+              <span className="feat-tag">{f.tag}</span>
+            </div>
+            <h3 className="mt-2 text-[19px] text-ink">{f.title}</h3>
+            <div className="mt-2.5 space-y-1.5">
+              {f.lines.map((line) => (
+                <p key={line} className="max-w-[54ch] text-small leading-[1.6] text-soft">
+                  {line}
+                </p>
+              ))}
+            </div>
           </article>
         ))}
       </div>
